@@ -15,40 +15,49 @@ import edu.jsu.mcis.CustomWidget;
 
 @RobotKeywords
 public class CustomWidgetKeywords {
-    @RobotKeyword("Clicks on the custom widget at the given coordinates.\n")
-    @ArgumentNames({"x", "y"})
-    public void clickCustomWidget(int x, int y) {
-        ContainerOperator context = (ContainerOperator) Context.getContext();
-        ComponentChooser chooser = new CustomWidgetChooser();
-        JComponentOperator operator = new JComponentOperator(context, chooser);
-        operator.clickMouse(x, y, 1);
-        // could also do this when needed (I think this works)
-        // CustomWidget w = (CustomWidget)operator.getSource();
-        // w.whatever();
-    }
-    
-    @RobotKeyword("Clicks inside the shape of the custom widget.\n")
+
+    @RobotKeyword("Clicks inside the Hexagon shape of the custom widget.\n")
     @ArgumentNames({})
-    public void clickCustomWidgetInside() {
+    public void clickHexagonInside() {
         ContainerOperator context = (ContainerOperator) Context.getContext();
         ComponentChooser chooser = new CustomWidgetChooser();
         JComponentOperator operator = new JComponentOperator(context, chooser);
         CustomWidget w = (CustomWidget)operator.getSource();
-        Rectangle bounds = w.getShape().getBounds();
+        Rectangle bounds = w.getShapes()[0].getBounds();
         operator.clickMouse(bounds.x + bounds.width/2, bounds.y + bounds.height/2, 1);
     }
-    
-    @RobotKeyword("Clicks outside the shape of the custom widget.\n")
+    @RobotKeyword("Clicks outside the Hexagon shape of the custom widget.\n")
     @ArgumentNames({})
-    public void clickCustomWidgetOutside() {
+    public void clickHexagonOutside() {
         ContainerOperator context = (ContainerOperator) Context.getContext();
         ComponentChooser chooser = new CustomWidgetChooser();
         JComponentOperator operator = new JComponentOperator(context, chooser);
         CustomWidget w = (CustomWidget)operator.getSource();
-        Rectangle bounds = w.getShape().getBounds();
+        Rectangle bounds = w.getShapes()[0].getBounds();
         operator.clickMouse(bounds.x - 10, bounds.y - 10, 1);
     }
-        
+
+    @RobotKeyword("Clicks inside the Octagon shape of the custom widget.\n")
+    @ArgumentNames({})
+    public void clickOctagonInside() {
+        ContainerOperator context = (ContainerOperator) Context.getContext();
+        ComponentChooser chooser = new CustomWidgetChooser();
+        JComponentOperator operator = new JComponentOperator(context, chooser);
+        CustomWidget w = (CustomWidget)operator.getSource();
+        Rectangle bounds = w.getShapes()[1].getBounds();
+        operator.clickMouse(bounds.x + bounds.width/2, bounds.y + bounds.height/2, 1);
+    }
+    @RobotKeyword("Clicks outside the Octagon shape of the custom widget.\n")
+    @ArgumentNames({})
+    public void clickOctagonOutside() {
+        ContainerOperator context = (ContainerOperator) Context.getContext();
+        ComponentChooser chooser = new CustomWidgetChooser();
+        JComponentOperator operator = new JComponentOperator(context, chooser);
+        CustomWidget w = (CustomWidget)operator.getSource();
+        Rectangle bounds = w.getShapes()[1].getBounds();
+        operator.clickMouse(bounds.x - 10, bounds.y - 10, 1);
+    }
+
     class CustomWidgetChooser implements ComponentChooser {
         public CustomWidgetChooser() {}
         public boolean checkComponent(Component comp) {

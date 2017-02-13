@@ -8,29 +8,29 @@ import java.awt.event.*;
 
 public class CustomWidgetTest {
     private CustomWidget widget;
-    
+
     private Point getCenterOfWidget() {
-        Rectangle bounds = widget.getShape().getBounds();
+        Rectangle bounds = widget.getShapes()[0].getBounds();
         return new Point(bounds.x + bounds.width/2, bounds.y + bounds.height/2);
     }
-    
+
     @Before
     public void setUp() {
         widget = new CustomWidget();
     }
-    
+
 	@Test
-	public void testWidgetIsInitiallyDeselected() {
-		assertFalse(widget.isSelected());
+	public void testHexagonIsInitiallyDeselected() {
+		assertTrue(widget.isSelected());
 	}
-    
+
     @Test
-    public void testClickingCenterOfWidgetSelectsIt() {
+    public void testClickingCenterOfHexagonSelectsOctagon() {
         Point center = getCenterOfWidget();
-        MouseEvent event = new MouseEvent(widget, MouseEvent.MOUSE_CLICKED, System.currentTimeMillis(), 
+        MouseEvent event = new MouseEvent(widget, MouseEvent.MOUSE_CLICKED, System.currentTimeMillis(),
                                           0, center.x, center.y, 1, false);
-        
+
         widget.mouseClicked(event);
-        assertTrue(widget.isSelected());
+        assertTrue(widget.isOctagonSelected());
     }
 }

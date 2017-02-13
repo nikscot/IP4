@@ -11,16 +11,16 @@ public class Main extends JPanel implements ShapeObserver {
     public Main() {
         widget = new CustomWidget();
         widget.addShapeObserver(this);
-        label = new JLabel("NOT SELECTED", JLabel.CENTER);
+        label = new JLabel("Hexagon", JLabel.CENTER);
         label.setName("label");
         setLayout(new BorderLayout());
         add(widget, BorderLayout.CENTER);
         add(label, BorderLayout.NORTH);
     }
-    
+
     public void shapeChanged(ShapeEvent event) {
-        if(event.isSelected()) { label.setText("SELECTED"); }
-        else { label.setText("NOT SELECTED"); }
+        if(event.isHexagonSelected()) { label.setText("Hexagon"); }
+        if(event.isOctagonSelected()) { label.setText("Octagon"); }
     }
 
 
