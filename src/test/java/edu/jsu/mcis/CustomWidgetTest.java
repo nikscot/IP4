@@ -31,6 +31,6 @@ public class CustomWidgetTest {
                                           0, center.x, center.y, 1, false);
 
         widget.mouseClicked(event);
-        assertTrue(widget.isOctagonSelected());
+        assertTrue(widget.isOctagon());
     }
 }

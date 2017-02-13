@@ -9,39 +9,38 @@ public class CustomWidget extends JPanel implements MouseListener {
     private java.util.List<ShapeObserver> observers;
 
 
-    private final Color HEX_SELECTED_COLOR = Color.green;
-    private final Color HEX_DEFAULT_COLOR = Color.white;
+    private final Color HEXAGON_SELECTED_COLOR = Color.green;
+    private final Color HEXAGON_DEFAULT_COLOR = Color.white;
+    private final Color OCTAGON_SELECTED_COLOR = Color.red;
+    private final Color OCTAGON_DEFAULT_COLOR = Color.white;
 
-    private final Color OCT_SELECTED_COLOR = Color.red;
-    private final Color OCT_DEFAULT_COLOR = Color.white;
-
-    private boolean hexagonSelected;
+    private boolean hexagon;
     private Point[] hexagonVertices;
 
-    private boolean octagonSelected;
+    private boolean octagon;
     private Point[] octagonVertices;
 
 
     public CustomWidget() {
         observers = new ArrayList<>();
-        Dimension dim = getPreferredSize();
+        Dimension size = getPreferredSize();
 
-        hexagonSelected = true;
+        hexagon = true;
         hexagonVertices = new Point[6];
         for(int i = 0; i < hexagonVertices.length; i++) {
             hexagonVertices[i] = new Point();
         }
-        calculatePolygonVertices(
-            hexagonVertices, dim.width, dim.height, 0, dim.width/3, dim.height/2
+        calculateVertices(
+            hexagonVertices, size.width, size.height, 0, size.width/3, size.height/2
         );
 
-        octagonSelected = false;
+        octagon = false;
         octagonVertices = new Point[8];
         for(int i = 0; i < octagonVertices.length; i++) {
             octagonVertices[i] = new Point();
         }
-        calculatePolygonVertices(
-            octagonVertices, dim.width, dim.height, Math.PI * 0.125, dim.width - (dim.width/3), dim.height/2
+        calculateVertices(
+            octagonVertices, size.width, size.height, Math.PI * 0.125, size.width - (size.width/3), size.height/2
         );
 
         setBorder(BorderFactory.createLineBorder(Color.black));
@@ -56,7 +55,7 @@ public class CustomWidget extends JPanel implements MouseListener {
         observers.remove(observer);
     }
     private void notifyObservers() {
-        ShapeEvent event = new ShapeEvent(hexagonSelected, octagonSelected);
+        ShapeEvent event = new ShapeEvent(hexagon, octagon);
 
         for(ShapeObserver obs : observers) {
             obs.shapeChanged(event);
@@ -69,7 +68,7 @@ public class CustomWidget extends JPanel implements MouseListener {
         return new Dimension(200, 200);
     }
 
-    private void calculatePolygonVertices(
+    private void calculateVertices(
         Point[] vertices, int width, int height, double offsetRad, int offsetX, int offsetY
     ) {
         int size = Math.min(width, height) / 2;
@@ -92,47 +91,47 @@ public class CustomWidget extends JPanel implements MouseListener {
         int width = getWidth();
         int height = getHeight();
 
-        calculatePolygonVertices(
+        calculateVertices(
             hexagonVertices, width, height, 0, width/3, height/2
         );
-        Shape shape = getPolygonShape(hexagonVertices);
+        Shape shape = getPolygonShapes(hexagonVertices);
         g2d.setColor(Color.black);
         g2d.draw(shape);
 
-        if (hexagonSelected) {
-            g2d.setColor(HEX_SELECTED_COLOR);
+        if (hexagon) {
+            g2d.setColor(HEXAGON_SELECTED_COLOR);
         } else {
-            g2d.setColor(HEX_DEFAULT_COLOR);
+            g2d.setColor(HEXAGON_DEFAULT_COLOR);
         }
         g2d.fill(shape);
 
-        calculatePolygonVertices(
+        calculateVertices(
             octagonVertices, width, height, Math.PI * 0.125, width - (width/3), height/2
         );
-        shape = getPolygonShape(octagonVertices);
+        shape = getPolygonShapes(octagonVertices);
         g2d.setColor(Color.black);
         g2d.draw(shape);
 
-        if (octagonSelected) {
-            g2d.setColor(OCT_SELECTED_COLOR);
+        if (octagon) {
+            g2d.setColor(OCTAGON_SELECTED_COLOR);
         } else {
-            g2d.setColor(OCT_DEFAULT_COLOR);
+            g2d.setColor(OCTAGON_DEFAULT_COLOR);
         }
         g2d.fill(shape);
     }
 
     public void mouseClicked(MouseEvent event) {
-        Shape shape = getPolygonShape(hexagonVertices);
+        Shape shape = getPolygonShapes(hexagonVertices);
 
         if(shape.contains(event.getX(), event.getY())) {
-            hexagonSelected = !hexagonSelected;
-            octagonSelected = !hexagonSelected;
+            hexagon = !hexagon;
+            octagon = !hexagon;
             notifyObservers();
         } else {
-            shape = getPolygonShape(octagonVertices);
+            shape = getPolygonShapes(octagonVertices);
             if(shape.contains(event.getX(), event.getY())) {
-                octagonSelected = !octagonSelected;
-                hexagonSelected = !octagonSelected;
+                octagon = !octagon;
+                hexagon = !octagon;
                 notifyObservers();
             }
         }
@@ -144,7 +143,7 @@ public class CustomWidget extends JPanel implements MouseListener {
     public void mouseEntered(MouseEvent event) {}
     public void mouseExited(MouseEvent event) {}
 
-    public Shape getPolygonShape(Point[] vertices) {
+    public Shape getPolygonShapes(Point[] vertices) {
         int[] x = new int[vertices.length];
         int[] y = new int[vertices.length];
         for(int i = 0; i < vertices.length; i++) {
@@ -156,16 +155,16 @@ public class CustomWidget extends JPanel implements MouseListener {
     }
     public Shape[] getShapes() {
         return new Shape[] {
-            getPolygonShape(hexagonVertices),
-            getPolygonShape(octagonVertices)
+            getPolygonShapes(hexagonVertices),
+            getPolygonShapes(octagonVertices)
         };
     }
 
     public boolean isSelected() {
-        return isHexagonSelected() || isOctagonSelected();
+        return isHexagon() || isOctagon();
     }
-    public boolean isHexagonSelected() { return hexagonSelected; }
-    public boolean isOctagonSelected() { return octagonSelected; }
+    public boolean isHexagon() { return hexagon; }
+    public boolean isOctagon() { return octagon; }
 
 
 

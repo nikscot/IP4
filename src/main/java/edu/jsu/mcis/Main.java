@@ -19,8 +19,8 @@ public class Main extends JPanel implements ShapeObserver {
     }
 
     public void shapeChanged(ShapeEvent event) {
-        if(event.isHexagonSelected()) { label.setText("Hexagon"); }
-        if(event.isOctagonSelected()) { label.setText("Octagon"); }
+        if(event.isHexagon()) { label.setText("Hexagon"); }
+        if(event.isOctagon()) { label.setText("Octagon"); }
     }
 
 
